@@ -23,8 +23,10 @@ fastify.register(jwt, { secret: "supersecret" });
 
 const start = async () => {
   try {
-    await fastify.listen({ port: 3000 });
-    fastify.log.info("Server running at http://localhost:3000");
+    await fastify.listen({ port: process.env.PORT || 3000 });
+    fastify.log.info(
+      `Server running at http://localhost:${process.env.PORT || 3000}`
+    );
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
