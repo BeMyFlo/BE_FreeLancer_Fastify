@@ -19,20 +19,17 @@ const sequelize = new Sequelize(
 
 const db = {};
 
-// Tự động import tất cả models trong thư mục models
 const files = fs
   .readdirSync(__dirname)
   .filter((file) => file.endsWith(".js") && file !== "index.js");
 
 for (const file of files) {
-  // ✅ Dùng pathToFileURL để tránh lỗi "c:"
   const moduleUrl = pathToFileURL(path.join(__dirname, file)).href;
   const { default: defineModel } = await import(moduleUrl);
   const model = defineModel(sequelize);
   db[model.name] = model;
 }
 
-// Setup associate nếu có
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
